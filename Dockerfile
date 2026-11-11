@@ -10,6 +10,7 @@ WORKDIR /app
 
 RUN addgroup -g 1000 -S torrplay && \
     adduser -u 1000 -S -G torrplay torrplay && \
+    mkdir -p /app/data && \
     chown -R torrplay:torrplay /app
 
 COPY --chown=torrplay:torrplay --chmod=0755 \

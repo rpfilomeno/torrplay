@@ -10,6 +10,9 @@ services:
     ports:
       - "8090:8090"
     volumes:
-      - ./data:/app/data
+      - torrplay-data:/app/data
     command: ["--data-dir", "/app/data"]
     restart: unless-stopped
+
+volumes:
+  torrplay-data:
