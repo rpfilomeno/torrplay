@@ -12,12 +12,10 @@ SPDX-License-Identifier: MIT
 [![Next.js Version](https://img.shields.io/badge/Next.js-15-black?style=flat&logo=next.js)](https://nextjs.org/)
 [![Build Status](https://github.com/torrplay/torrplay/actions/workflows/release.yml/badge.svg)](https://github.com/torrplay/torrplay/actions)
 [![Latest Version](https://img.shields.io/github/v/release/torrplay/torrplay)](https://github.com/torrplay/torrplay/releases)
-[![Docker](https://img.shields.io/badge/ghcr.io-torrplay%2Ftorrplay-blue?logo=docker)](https://github.com/torrplay/torrplay/pkgs/container/torrplay)
+[![Docker](https://img.shields.io/badge/Docker%20Hub-rpfilomeno%2Ftorrplay-blue?logo=docker)](https://hub.docker.com/r/rpfilomeno/torrplay)
 [![GitHub Stars](https://img.shields.io/github/stars/torrplay/torrplay?style=social)](https://github.com/torrplay/torrplay/stargazers)
 
 **Stream torrents instantly. No waiting for downloads.**
-
-[Русская версия](README-ru.md)
 
 TorrPlay is a torrent streaming application with a user-friendly interface. Simply paste a magnet link, pick a video file, and start watching.
 
@@ -39,13 +37,38 @@ docker run -d \
   -p 8090:8090 \
   -v $(pwd)/data:/app/data \
   --restart unless-stopped \
-  ghcr.io/torrplay/torrplay:latest \
+  rpfilomeno/torrplay:latest \
   --data-dir /app/data
 ```
 
 Open `http://localhost:8090` in your browser.
 
-More options: [Download prebuilt binaries](https://torrplay.github.io/download/) · [Running with Docker](https://torrplay.github.io/quick-start/running-with-docker/) · [Building from Source](https://torrplay.github.io/quick-start/building-from-source/)
+More options: [Download prebuilt binaries](https://torrplay.github.io/download/) · [Running with Docker](https://torrplay.github.io/quick-start/running-with-docker/)
+
+## Build from Source
+
+Requires [Go 1.26+](https://go.dev/dl/), [Node.js 24+](https://nodejs.org) and [pnpm 10](https://pnpm.io).
+
+```bash
+git clone https://github.com/rpfilomeno/torrplay.git && cd torrplay
+
+# 1. Build the web UI (exported to client/out)
+cd client && pnpm install --frozen-lockfile && pnpm build && cd ..
+cp -r client/out/. web/static/
+
+# 2. Build and run the server (embeds the UI)
+go build -o bin/torrplay ./cmd/torrplay
+./bin/torrplay
+```
+
+The Dockerfile copies a prebuilt Linux binary from `bin/`, so image builds need one extra cross-compile step:
+
+```bash
+GOOS=linux GOARCH=amd64 go build -o bin/torrplay-linux-amd64 ./cmd/torrplay
+docker build -t torrplay:latest .
+```
+
+`make client`, `make application` and `make docker` wrap these steps in Docker.
 
 ## Highlights
 

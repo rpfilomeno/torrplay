@@ -5,7 +5,7 @@
 ---
 services:
   torrplay:
-    image: ghcr.io/torrplay/torrplay:latest
+    image: rpfilomeno/torrplay:latest
     container_name: torrplay
     ports:
       - "8090:8090"
