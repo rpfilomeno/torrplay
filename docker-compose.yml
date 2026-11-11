@@ -6,6 +6,8 @@
 services:
   torrplay:
     image: rpfilomeno/torrplay:latest
+    # Dokploy runs `up -d` without pull; always pull so :latest pushes take effect
+    pull_policy: always
     container_name: torrplay
     ports:
       - "8090:8090"
